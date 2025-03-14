@@ -2,14 +2,17 @@ package org.nurgisa.tinyurl.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "Url")
+@Table(name = "url")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,12 @@ public class Url {
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
-    public Url() {
-    }
+    @Column(name = "clicks", nullable = false)
+    private int clicks = 0;
+
+    @OneToMany(mappedBy = "url", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClickEvent> clickEvents;
+
     public Url(String originalUrl, String shortUrl) {
         this.originalUrl = originalUrl;
         this.shortUrl = shortUrl;

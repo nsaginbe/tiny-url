@@ -1,17 +1,16 @@
 package org.nurgisa.tinyurl.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+// Immutable
 @Getter
-@Setter
 public class UrlDTO {
-    private String originalUrl;
-    private String shortUrl;
-    private LocalDateTime createdAt;
+    private final String originalUrl;
+    private final String shortUrl;
+    private final LocalDateTime createdAt;
 
     public UrlDTO(String originalUrl, String shortUrl) {
         this.originalUrl = originalUrl;

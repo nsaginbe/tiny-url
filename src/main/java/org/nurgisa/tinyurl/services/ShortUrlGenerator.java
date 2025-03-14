@@ -1,23 +1,22 @@
 package org.nurgisa.tinyurl.services;
 
-import java.security.SecureRandom;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
 
 public class ShortUrlGenerator {
-    private static final String LETTERS = "abcdefghijklmnopqrstuvwxyz";
-    private static final String DIGITS = "0123456789";
-    private static final SecureRandom RANDOM = new SecureRandom();
-
     public static String generate(String url) {
-        StringBuilder sb = new StringBuilder(6);
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(url.getBytes(StandardCharsets.UTF_8));
 
-        for (int i = 0; i < 3; i++) {
-            sb.append(LETTERS.charAt(RANDOM.nextInt(LETTERS.length())));
+            return new BigInteger(1, hash)
+                    .toString(36)
+                    .substring(0, 6);
         }
-
-        for (int i = 0; i < 3; i++) {
-            sb.append(DIGITS.charAt(RANDOM.nextInt(DIGITS.length())));
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not found", e);
         }
-
-        return sb.toString();
     }
 }
